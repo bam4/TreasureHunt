@@ -2,17 +2,55 @@
 using System.Collections;
 using UnityEngine.UI; // Allows access to UI elements in code
 
-public class Treasure : MonoBehaviour {
+public class MasterScriptGoal : MonoBehaviour {
 	//Attach this class to the goal, and add waypoints in the Inspector
 
 	public Text message; // This is the "Text Box" which contains the string that is outputted to the player. This is the Text UI object
 	public Transform player; // This is the position of the player, which can be accessed in the inspector.
-	public Transform guide; // This is the character that provides advice to the player.
-	public Transform door; // This is the position of the door that blocks the key.
-	public Transform openDoor; // This is the position of the openDoor that blocks the key.
-	public Transform key; // This is the position of one of the keys.
-	public Transform compass; // This is the position of the compass.
-	public static float activeDistance = .5f; // 
+
+	// This is the position of Toad, Gandalf, and Roman.
+	public Transform Toad; 
+	public Transform Gandalf;
+	public Transform Roman;
+
+
+	public Transform greyDoorOneClosed; // This is the position of the door that blocks the entrance to the Zelda section.
+	public Transform greyDoorOneOpen; // This is the open version of the greyDoor.
+
+	// This is the position of the keys.
+	public Transform blueKey; 
+	public Transform greenKey;
+	public Transform orangeKey;
+	public Transform redKey;
+	public Transform purpleKey;
+
+	// This is the position of the doors.
+	public Transform blueDoor;
+	public Transform greenDoor;
+	public Transform orangeDoor;
+	public Transform redDoor;
+	public Transform purpleDoor;
+
+	public Transform workBench;
+	public Transform MarioObject;
+	public Transform LOTRObject;
+	public Transform GTAObject;
+
+	public static float activeDistance = .5f; // This sets a single distance for object activation.
+
+
+	// This keeps track of which keys the player has and which keys he does not have.
+	private bool hasBlueKey = false;
+	private bool hasGreenKey = false;
+	private bool hasOrangeKey = false;
+	private bool hasRedKey = false;
+	private bool hasPurpleKey = false;
+
+	// This block keeps track of the Treasure Objects.
+	private bool hasMarioObject = false;
+	private bool hasLOTRObject = false;
+	private bool hasGTAObject = false;
+	private bool hasCamusBook = false;
 
 	private bool didPlayerWin = false; // This would allow the player to win the game.
 	private bool foundKey = false; // This would allow the player to open the door.
@@ -29,19 +67,19 @@ public class Treasure : MonoBehaviour {
 
 		// If they are near the guide, play the text below.
 
-		else if ( isNear(guide.position) ) { //near Megaman
+		else if ( isNear(Toad.position) ) { //near Megaman
 			message.text = "\"Find the key and regain your weapon\"";
 		}
 
 		// If they have not found the key and the door game object is active and the player is near the door, show the text below.
 
-		else if ( !foundKey && door.gameObject.activeInHierarchy && isNear(door.position)) { //near locked door
+		else if ( !foundKey && GrayDoor.gameObject.activeInHierarchy && isNear(GrayDoor.position)) { //near locked door
 			message.text = "Door locked!";
 		}
 
 		// If they player is near the key, show the text, turn off the closed door, turn on the open door, turn off the key.
 
-		else if ( isNear(key.position) ) { //by key
+		else if ( isNear(blueKey.position) ) { //by key
 			message.text = "Found key!";
 			if (!foundKey) {//if this is the first frame the player is in contact with the key
 				door.gameObject.SetActive(false);
@@ -50,12 +88,8 @@ public class Treasure : MonoBehaviour {
 			}
 			foundKey = true; // Give the player the "key."
 		}
-	
 
-		// If the player is near the compass, show the text below.
-		else if ( isNear(compass.position) ) { //by compass
-			message.text = "The key is to the west";
-		}
+	
 
 		// If the player is near the treasure, play the text prompting them for a "Space" input. They will win!
 
@@ -73,7 +107,7 @@ public class Treasure : MonoBehaviour {
 			message.text = "";
 		}
 	}
-		
+
 	private bool isNear(Vector3 other) {
 		return ( (player.position - other).magnitude < activeDistance );
 	}
