@@ -332,7 +332,7 @@ public class MasterScriptGoal : MonoBehaviour {
 					completedQuestCounterOne++;
 
 				if ((completedQuestCounterOne == 0)) {
-					message.text = "\"By combining Peach's smartphone and Roman's rollerskates, you created the first Artificial Intelligence and achieved your OWN goal! Congratulations, you win! [SPACE]";
+					message.text = "By combining Peach's smartphone and Roman's rollerskates, you created the first Artificial Intelligence and achieved your OWN goal! Congratulations, you win! [SPACE]";
 				}
 
 				if ( (completedQuestCounterOne == 1) ) {
@@ -430,9 +430,10 @@ public class MasterScriptGoal : MonoBehaviour {
 			panel.GetComponent<Image>().enabled = false;
 		}
 
-		if (Time.time < 5) {
+		if (Time.timeSinceLevelLoad < 3) {
 			panel.GetComponent<Image>().enabled = true;
 			message.text = "Find your purpose!";
+
 		}
 	}
 
