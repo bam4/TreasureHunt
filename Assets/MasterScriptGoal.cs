@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI; // Allows access to UI elements in code
+using UnityEngine.SceneManagement;
 
 public class MasterScriptGoal : MonoBehaviour {
 	//Attach this class to the goal, and add waypoints in the Inspector
@@ -65,6 +66,9 @@ public class MasterScriptGoal : MonoBehaviour {
 	private int spokeToGandalfCounter = 0;
 	private int spokeToRomanCounter = 0;
 	private int camusCounter = 0;
+	private int completedQuestCounterOne = 0;
+	private int completedQuestCounterTwo = 0;
+	private int completedQuestCounterThree = 0;
 
 	private bool goalTeleporter = false;
 	private bool goalAI = false;
@@ -72,6 +76,7 @@ public class MasterScriptGoal : MonoBehaviour {
 	private bool helpGandalf = false;
 	private bool helpToad = false;
 	private bool helpRoman = false;
+	private bool endScreen = false;
 
 
 
@@ -87,8 +92,13 @@ public class MasterScriptGoal : MonoBehaviour {
 	
 
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 
+		if (endScreen) {
+			if (Input.GetKeyDown (KeyCode.X))
+				SceneManager.LoadScene (2);
+		}
 
 
 		panel.GetComponent<Image> ().enabled = true;
@@ -186,7 +196,7 @@ public class MasterScriptGoal : MonoBehaviour {
 			if (Input.GetKeyDown (KeyCode.Space))
 				camusCounter++;
 		} else if (isNear (theStranger.position) && camusCounter == 5) {
-			message.text = "To aim to create the world's fastest shoes, press [F]. To aim to create Artificial Intelligence, press [I]. To aim to create a teleporter, press [T]";
+			message.text = "To aim to create the world's fastest shoes, press [F]. To aim to create Artificial Intelligence, press [I]. To aim to create a teleporter, press [T].";
 			if (goalAI) {
 				message.text = "You chose to build Artifical Intelligence! Find the two items that create this project and bring them to the workbench in Tron's house.[SPACE]";
 				if (Input.GetKeyDown (KeyCode.Space))
@@ -312,41 +322,108 @@ public class MasterScriptGoal : MonoBehaviour {
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				redDoor.gameObject.SetActive (false);
 			}
-		} else if (isNear (workBench.position) && goalAI) {
+
+
+
+		} else if (isNear (workBench.position) && goalAI && (completedQuestCounterOne < 3)) {
 			if (hasGTAObject && hasMarioObject) {
-				message.text = "By combining Peach's smartphone and Roman's rollerskates, you created the first Artificial Intelligence and achieved your OWN goal! Congratulations, you win!";
-			} else {
+
+				if (Input.GetKeyDown(KeyCode.Space)) 
+					completedQuestCounterOne++;
+
+				if ((completedQuestCounterOne == 0)) {
+					message.text = "\"By combining Peach's smartphone and Roman's rollerskates, you created the first Artificial Intelligence and achieved your OWN goal! Congratulations, you win! [SPACE]";
+				}
+
+				if ( (completedQuestCounterOne == 1) ) {
+					message.text = "Press [X] at any point to exit the game!";
+					// if (Input.GetKeyDown(KeyCode.Space)) 
+					//	completedQuestCounterThree++;
+				} 
+
+				if ( /*(Input.GetKeyDown (KeyCode.Space)) &&*/ (completedQuestCounterOne == 2)) {
+					endScreen = true;
+					goalAI = false;
+					//completedQuestCounterThree++;
+				}
+				
+
+			} else if (!hasGTAObject && !hasMarioObject) {
 				message.text = "You do not have the proper objects to build Artificial Intelligence.";
 			}
-		} else if (isNear (workBench.position) && goalShoes) {
+
+
+		} else if (isNear (workBench.position) && goalShoes && (completedQuestCounterTwo < 3)) {
 			if (hasLOTRObject && hasGTAObject) {
-				message.text = "By combining Gandalf's rockets and Roman's rollerskates, you created the first Rocket Shoes and achieved your OWN goal! Congratulations, you win!";
-			} else {
-				message.text = "You do not have the proper objects to build Rocket Shotes.";
+
+				if (Input.GetKeyDown(KeyCode.Space)) 
+					completedQuestCounterTwo++;
+
+				if ((completedQuestCounterTwo == 0)) {
+					message.text = "By combining Gandalf's rockets and Roman's rollerskates, you created the first Rocket Shoes and achieved your OWN goal! Congratulations, you win! [SPACE]";
+				}
+
+				if ( (completedQuestCounterTwo == 1) ) {
+					message.text = "Press [X] at any point to exit the game!";
+					// if (Input.GetKeyDown(KeyCode.Space)) 
+					//	completedQuestCounterThree++;
+				} 
+
+				if ( /*(Input.GetKeyDown (KeyCode.Space)) &&*/ (completedQuestCounterTwo == 2)) {
+					endScreen = true;
+					goalShoes = false;
+					//completedQuestCounterThree++;
+				}
+
+
+				} else if (!hasGTAObject && !hasLOTRObject) {
+					message.text = "You do not have the proper objects to build Rocket Shoes.";
+				}
+				
+		} else if (isNear (workBench.position) && goalTeleporter && (completedQuestCounterThree < 3)) {
+			if (hasMarioObject && hasLOTRObject) {
+				
+				if (Input.GetKeyDown(KeyCode.Space)) 
+					completedQuestCounterThree++;
+
+				if ((completedQuestCounterThree == 0)) {
+					message.text = "By combining Peach's smartphone and Gandalf's rockets, you created the first Teleporter and achieved your OWN goal! Congratulations, you win!";
+				}
+				
+				if ( (completedQuestCounterThree == 1) ) {
+					message.text = "Press [X] at any point to exit the game!";
+					// if (Input.GetKeyDown(KeyCode.Space)) 
+					//	completedQuestCounterThree++;
+				} 
+
+				if ( /*(Input.GetKeyDown (KeyCode.Space)) &&*/ (completedQuestCounterThree == 2)) {
+					endScreen = true;
+					goalTeleporter = false;
+					//completedQuestCounterThree++;
+					}
+			} else if (!hasMarioObject && !hasLOTRObject) {
+					message.text = "You do not have the proper objects to build Teleporter.";
+				}
+				
 			}
-		} else if (isNear (workBench.position) && goalTeleporter) {
-			if (hasGTAObject && hasLOTRObject) {
-				message.text = "By combining Peach's smartphone and Gandalf's rockets, you created the first Teleporter and achieved your OWN goal! Congratulations, you win!";
-			} else {
-				message.text = "You do not have the proper objects to build Teleporter.";
-			}
-		}
+
+	
 
 
 
 
-		// If they have not found the key and the door game object is active and the player is near the door, show the text below.
+	// If they have not found the key and the door game object is active and the player is near the door, show the text below.
 
-		// If the player is near the treasure, play the text prompting them for a "Space" input. They will win!
+	// If the player is near the treasure, play the text prompting them for a "Space" input. They will win!
 
-//		else if ( isNear(transform.position) ) { //near treasure
-//			message.text = "Press [SPACE] to get Disc and win!";
-//			if (Input.GetKeyDown(KeyCode.Space)){
-//				didPlayerWin = true;
-//			}
-//			else if (didPlayerWin)
-//				message.text = "Congratulations, you win!!!!";
-//		}
+	//		else if ( isNear(transform.position) ) { //near treasure
+	//			message.text = "Press [SPACE] to get Disc and win!";
+	//			if (Input.GetKeyDown(KeyCode.Space)){
+	//				didPlayerWin = true;
+	//			}
+	//			else if (didPlayerWin)
+	//				message.text = "Congratulations, you win!!!!";
+	//		}
 
 		else { //not near anything
 			// hasMoved = true;
@@ -355,7 +432,7 @@ public class MasterScriptGoal : MonoBehaviour {
 
 		if (Time.time < 5) {
 			panel.GetComponent<Image>().enabled = true;
-			message.text = "Find the treasure!";
+			message.text = "Find your purpose!";
 		}
 	}
 
